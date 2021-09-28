@@ -49,7 +49,7 @@ declare DATA2=`date +%d %m %Y %H:%M`
 declare DIR_BACKUP="/opt/backup"  #  Define o diretório de backup
 declare SENHA=""
 declare USER="root"
-declare CDB="/opt/backup/consulta_tam_db.sql"
+declare CDB="/opt/backup/consulta_tam_db.sql" 
 DIR_DEST_BACKUP=$DIR_BACKUP/$DATA/
 ###################################################################
 
@@ -84,7 +84,8 @@ for banco in $BANCOS
 
     echo "Iniciando backup do banco de dados [$banco]"
    # comando que realmente executa o dump do banco de dados 
-    mysqldump --hex-blob --lock-all-tables -u $USER -p$SENHA --databases $banco > $DIR_BACKUP/$DATA/$NOME
+    mysqldump --skip-lock-tables -u $USER -p$SENHA --databases $banco > $DIR_BACKUP/$DATA/$NOME #BACKUP COM TABELA RADDACT
+	mysqldump --skip-lock-tables --ignore-table=radius_tio.radacct -u $USER -p$SENHA --databases $banco > $DIR_BACKUP/$DATA/$NOME #BACKUP SEM TABELA RADDACT
 		cd $DIR_BACKUP/$DATA/
 		tar -czf $NOMET.tar.gz $NOME
 		rm $DIR_BACKUP/$DATA/$NOME*
